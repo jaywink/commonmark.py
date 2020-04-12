@@ -17,7 +17,7 @@ from commonmark.render.html import HtmlRenderer
 from commonmark.render.rst import ReStructuredTextRenderer
 
 
-def commonmark(text, format="html"):
+def commonmark(text, format="html", ignore_html_blocks=False):
     """Render CommonMark into HTML, JSON or AST
     Optional keyword arguments:
     format:     'html' (default), 'json' or 'ast'
@@ -25,7 +25,7 @@ def commonmark(text, format="html"):
     >>> commonmark("*hello!*")
     '<p><em>hello</em></p>\\n'
     """
-    parser = Parser()
+    parser = Parser(ignore_html_blocks=ignore_html_blocks)
     ast = parser.parse(text)
     if format not in ["html", "json", "ast", "rst"]:
         raise ValueError("format must be 'html', 'json' or 'ast'")

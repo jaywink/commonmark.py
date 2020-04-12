@@ -586,9 +586,10 @@ class BlockStarts(object):
 
 
 class Parser(object):
-    def __init__(self, options={}):
+    def __init__(self, options={}, ignore_html_blocks=False):
         self.doc = Node('document', [[1, 1], [0, 0]])
         self.block_starts = BlockStarts()
+        self.ignore_html_blocks = ignore_html_blocks
         self.tip = self.doc
         self.oldtip = self.doc
         self.current_line = ''
@@ -781,7 +782,10 @@ class Parser(object):
 
             i = 0
             while i < starts_len:
-                res = getattr(starts, starts.METHODS[i])(self, container)
+                if self.ignore_html_blocks and starts.METHODS[i] == 'html_block':
+                    res = 0
+                else:
+                    res = getattr(starts, starts.METHODS[i])(self, container)
                 if res == 1:
                     container = self.tip
                     break
